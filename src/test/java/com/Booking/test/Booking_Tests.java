@@ -6,6 +6,9 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 
 import java.text.SimpleDateFormat;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -85,31 +88,32 @@ public class Booking_Tests {
         Date day = new Date();
         SimpleDateFormat todayday = new SimpleDateFormat("dd");
 
-
         webDriverManger.getDriver().findElement(By.xpath("//input[@id='ss']")).sendKeys("Dubai");
         webDriverManger.getDriver().findElement(By.xpath("//div[contains(@class,'xp__dates-inner xp__dates__checkin')]//div[contains(@class,'xp__group xp__date c2-wrapper-s-hidden')]//div[contains(@class,'sb-date-field b-datepicker')]//div[contains(@class,'-empty sb-date__field-svg_icon')]//span[@class='sb-date-field__icon sb-date-field__icon-btn bk-svg-wrapper calendar-restructure-sb']")).click();
-      //  String dateXpath = "//span[contains(@aria-label'" + sdf.format(today) + "')]//span[contains(@aria-hidden,'true')][contains(text(),'28')]";
+
         String dateXpath = "//span[@aria-label='" + sdf.format(today) + "']//span[@aria-hidden='true'][contains(text(),'"+ todayday.format(day) +"')]";
         webDriverManger.getDriver().findElement(By.xpath(dateXpath)).click();
-        webDriverManger.getDriver().findElement(By.xpath("//span[@aria-label='9 May 2021']//span[@aria-hidden='true'][contains(text(),'9')]")).click();
-        webDriverManger.getDriver().findElement(By.className("xp__button")).click();
-        boolean onestar = webDriverManger.getDriver().findElement(By.xpath(" //span[contains(text(),'1 star')]")).isDisplayed();
-        Assert.assertTrue("One Star is not displayed",onestar);
-        boolean fivestar = webDriverManger.getDriver().findElement(By.xpath("//span[contains(text(),'5 star')]")).isDisplayed();
-        Assert.assertTrue("five Star is not displayed",fivestar);
-        webDriverManger.getDriver().findElement(By.xpath("//span[contains(text(),'5 star')]")).click();
-        webDriverManger.getDriver().findElement(By.xpath("//span[contains(text(),'Superb: 9+')]")).click();
-        webDriverManger.getDriver().manage().timeouts().implicitlyWait(12, TimeUnit.SECONDS);
-     //   boolean burj = webDriverManger.getDriver().findElement(By.xpath("//span[contains(text(),'Burj Al Arab Jumeirah')]")).isDisplayed();
-     //   Assert.assertTrue("One Star is not displayed",burj);
-     //   webDriverManger.getDriver().findElement(By.xpath("//span[contains(text(),'Burj Al Arab Jumeirah')]")).click();
-     //   webDriverManger.getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
 
+            LocalDate date = LocalDate.now();
+            DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+            String returndate = date.format(formatters);
 
+            System.out.println("Todays Date " + returndate );
 
+            date = date.plusDays(14);
+            DateTimeFormatter Rdate = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+            DateTimeFormatter Rdays = DateTimeFormatter.ofPattern("dd");
+            System.out.println(date.format(Rdate));
+            System.out.println(date.format(Rdays));
 
-
+            webDriverManger.getDriver().findElement(By.xpath("//span[@aria-label='"+ date.format(Rdate) +"']//span[@aria-hidden='true'][contains(text(),'"+ date.format(Rdays) +"')]")).click();
+            webDriverManger.getDriver().findElement(By.className("xp__button")).click();
+            webDriverManger.getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+            boolean AllInclusive =  webDriverManger.getDriver().findElement(By.xpath("//span[contains(text(),'All-inclusive')]")).isDisplayed();
+            Assert.assertTrue("All-inclusive is not displayed",AllInclusive);
+            webDriverManger.getDriver().findElement(By.xpath("//span[contains(text(),'All-inclusive')]")).click();
+            System.out.println("All-Inclusive-Dubai");
 
 
     }
